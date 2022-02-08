@@ -1,7 +1,5 @@
-//SPDX-License-Identifier: Unlicense
 pragma solidity ^0.8.0;
 
-import "hardhat/console.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 contract Airdrop {
@@ -18,6 +16,8 @@ contract Airdrop {
     }
 
     event Claim(address indexed sender, uint256 amount);
+    event WithdrawUnclaim(address owner, uint256 amount);
+    event AdminChange(address newOwner);
 
     struct Claimed {
         bool eligible;
@@ -61,10 +61,16 @@ contract Airdrop {
 
     function withdrawRemainingTokens() public onlyAdmin {
         require(block.timestamp > endDate, "Not ended.");
-        airdropToken.transfer(owner, airdropToken.balanceOf(address(this)));
+
+        uint256 balance = airdropToken.balanceOf(address(this));
+        airdropToken.transfer(owner, balance);
+
+        emit WithdrawUnclaim(owner, balance);
     }
 
     function changeAdmin(address _newOwner) public onlyAdmin {
         owner = _newOwner;
+
+        emit AdminChange(owner);
     }
 }
