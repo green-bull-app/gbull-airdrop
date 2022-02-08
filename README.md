@@ -1,8 +1,8 @@
-# Basic Sample Hardhat Project
+# Green Bull Airdrop Contract
 
-This project demonstrates a basic Hardhat use case. It comes with a sample contract, a test for that contract, a sample script that deploys that contract, and an example of a task implementation, which simply lists the available accounts.
+This is a simple airdrop contract. A list of all eligible users have been included in this repository ([airdrop.xlsx](https://github.com/green-bull-app/gbull-airdrop/blob/main/airdrop.xlsx?raw=true)). After the contract is deployed, users will have 3 months from the specified start date to claim their tokens. After which the Green Bull Treasury has the right to remove any un-claimed tokens.
 
-Try running some of the following tasks:
+# Hardhat Hints 
 
 ```shell
 npx hardhat accounts
