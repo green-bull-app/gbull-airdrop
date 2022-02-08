@@ -19,7 +19,7 @@ const baseTokenContract = () => {
 
 const DeployAirdropContract = async () => {
   const Airdrop = await ethers.getContractFactory("Airdrop");
-  const airdrop = await Airdrop.deploy(gbullTokenAddress, BigInt(5000 * 10 ** 18).toString());
+  const airdrop = await Airdrop.deploy(gbullTokenAddress, BigInt(5000 * 10 ** 18).toString(), await EligibleUser());
   await airdrop.deployed();
 
   return airdrop;
@@ -31,6 +31,12 @@ const ImpersonateAccount = async (accounts, enable) => {
     method,
     params: [accounts],
   });
+}
+
+const EligibleUser = async () => {
+  const eligibleUser = (await hre.ethers.getSigners())[0].address;
+
+  return [eligibleUser];
 }
 
 const AddFundsToAirDropContract = async (airdrop) => {
@@ -51,7 +57,8 @@ const DeployAndFundContract = async () => {
 describe("Airdrop", function () {
   it("Should test if airdrops can be claimed ineligible users.", async function () {
     const airdrop = await DeployAndFundContract();
-    const claimTx = airdrop.connect((await hre.ethers.getSigners())[1]).claim();
+    const signers = await hre.ethers.getSigners();
+    const claimTx = airdrop.connect(signers[1]).claim();
 
     expect(claimTx).to.be.revertedWith('Not eligible.');
   });
