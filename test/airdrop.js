@@ -25,26 +25,45 @@ const DeployAirdropContract = async () => {
   return airdrop;
 }
 
-const ImpersonateAccount = async (accounts) => {
+const ImpersonateAccount = async (accounts, enable) => {
+  const method = enable ? 'hardhat_impersonateAccount' : 'hardhat_stopImpersonatingAccount';
   await hre.network.provider.request({
-    method: "hardhat_impersonateAccount",
+    method,
     params: [accounts],
   });
 }
 
 const AddFundsToAirDropContract = async (airdrop) => {
-  const airdropAmount = BigInt(5000000);
-  await ImpersonateAccount(whaleAccountAddress);
+  const airdropAmount = BigInt(5000000 * 10 ** 18);
+  await ImpersonateAccount(whaleAccountAddress, true);
   const whaleSigner = await hre.ethers.provider.getSigner(whaleAccountAddress);
   const tx = await baseTokenContract().connect(whaleSigner).transfer(airdrop.address, airdropAmount.toString());
   await tx.wait();
+  await ImpersonateAccount(whaleAccountAddress, false);
+}
+
+const DeployAndFundContract = async () => {
+  const airdrop = await DeployAirdropContract();
+  await AddFundsToAirDropContract(airdrop);
+  return airdrop;
 }
 
 describe("Airdrop", function () {
-  it("Should test if airdrops can be claimed before the specified date", async function () {
-    const airdrop = await DeployAirdropContract();
-    await AddFundsToAirDropContract(airdrop);
+  it("Should test if airdrops can be claimed ineligible users.", async function () {
+    const airdrop = await DeployAndFundContract();
+    const claimTx = airdrop.connect((await hre.ethers.getSigners())[1]).claim();
 
+    expect(claimTx).to.be.revertedWith('Not eligible.');
+  });
+
+  it("Should test if airdrops can be claimed before the specified date", async function () {
+    const airdrop = await DeployAndFundContract();
+
+    const claimTx = airdrop.connect((await hre.ethers.getSigners())[0]).claim();
+
+    console.log(claimTx);
+
+    expect(claimTx).to.be.revertedWith('Not eligible.');
     // expect(await airdrop.greet()).to.equal("Hello, world!");
     //
     // const setGreetingTx = await airdrop.setGreeting("Hola, mundo!");
@@ -66,8 +85,4 @@ describe("Airdrop", function () {
   it("Should test if users can claim airdrop twice", async function () {
 
   });
-
-  it("Should test if ineligible users can claim airdrop", async function () {
-
-  })
 });
