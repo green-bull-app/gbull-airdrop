@@ -1,6 +1,8 @@
 require("@nomiclabs/hardhat-waffle");
 require('@openzeppelin/hardhat-upgrades');
 
+require("dotenv").config();
+
 const rpc = 'https://polygon-rpc.com';
 
 // This is a sample Hardhat task. To learn how to create your own go to
@@ -29,7 +31,8 @@ module.exports = {
     },
     polygon_main: {
       url: rpc,
-      chainId: 137
+      chainId: 137,
+      accounts: [process.env.TREASURY_PRIVATE_KEY]
     },
   },
   paths: {
