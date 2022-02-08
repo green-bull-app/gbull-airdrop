@@ -26,11 +26,11 @@ const endDate = (currentBlockTimestamp) => {
 
 async function main() {
     const list = xlsx.parse(path.join(__dirname, '../airdrop.xlsx'))[0].data;
-    let accounts = [];
+    let accs = [];
 
     list.forEach((l, i) => {
         if (l.length === 1 && i !== 0) {
-            accounts.push(l[0]);
+            accs.push(l[0]);
         }
     });
 
@@ -38,14 +38,16 @@ async function main() {
 
     // We get the contract to deploy
     const Airdrop = await hre.ethers.getContractFactory("Airdrop");
+    console.log('Deploying contract')
     const airdrop = await Airdrop.deploy(
         gbullTokenAddress,
         BigInt(5000 * 10 ** 18).toString(), // 5K tokens for each user.
         startDate(currentBlockTimestamp).toString(),
         endDate(currentBlockTimestamp).toString(),
-        accounts
+        accs
     );
 
+    console.log('Waiting for deployment')
     await airdrop.deployed();
 
     console.log("Airdrop contract deployed to:", airdrop.address);
