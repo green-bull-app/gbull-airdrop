@@ -1,0 +1,33 @@
+{
+  "name": "gbull-airdrop",
+  "version": "1.0.0",
+  "description": "GBULL token airdrop.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/green-bull-app/gbull-airdrop.git"
+  },
+  "author": "The Bull",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/green-bull-app/gbull-airdrop/issues"
+  },
+  "homepage": "https://github.com/green-bull-app/gbull-airdrop#readme",
+  "devDependencies": {
+    "@nomiclabs/hardhat-ethers": "^2.0.4",
+    "@nomiclabs/hardhat-waffle": "^2.0.2",
+    "@openzeppelin/hardhat-upgrades": "^1.14.0",
+    "chai": "^4.3.6",
+    "dotenv": "^16.0.0",
+    "ethereum-waffle": "^3.4.0",
+    "ethers": "^5.5.4",
+    "hardhat": "^2.8.3"
+  },
+  "dependencies": {
+    "@openzeppelin/contracts": "^4.4.2",
+    "node-xlsx": "^0.21.0"
+  }
+}
