@@ -57,21 +57,7 @@ describe("Airdrop", function () {
   });
 
   it("Should test if airdrops can be claimed before the specified date", async function () {
-    const airdrop = await DeployAndFundContract();
 
-    const claimTx = airdrop.connect((await hre.ethers.getSigners())[0]).claim();
-
-    console.log(claimTx);
-
-    expect(claimTx).to.be.revertedWith('Not eligible.');
-    // expect(await airdrop.greet()).to.equal("Hello, world!");
-    //
-    // const setGreetingTx = await airdrop.setGreeting("Hola, mundo!");
-    //
-    // // wait until the transaction is mined
-    // await setGreetingTx.wait();
-    //
-    // expect(await airdrop.greet()).to.equal("Hola, mundo!");
   });
 
   it("Should test if airdrops can be claimed after the specified date", async function () {
