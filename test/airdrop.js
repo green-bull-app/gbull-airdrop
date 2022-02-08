@@ -38,8 +38,6 @@ const AddFundsToAirDropContract = async (airdrop) => {
   const whaleSigner = await hre.ethers.provider.getSigner(whaleAccountAddress);
   const tx = await baseTokenContract().connect(whaleSigner).transfer(airdrop.address, airdropAmount.toString());
   await tx.wait();
-  const airdropContractBalance = BigInt(await baseTokenContract().balanceOf(airdrop.address));
-  console.log(airdropContractBalance)
 }
 
 describe("Airdrop", function () {
